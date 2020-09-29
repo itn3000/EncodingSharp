@@ -1,0 +1,5 @@
+[workspace]
+
+members = [
+    "encoding-rs-glue"
+]
