@@ -362,3 +362,4 @@ MigrationBackup/
 FodyWeavers.xsd
 target/
 .vscode/
+nuget-cache/

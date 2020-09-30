@@ -22,13 +22,15 @@ namespace EncodingSharp
             }
         }
 
-        public unsafe uint EncodeUtf8(ReadOnlySpan<byte> u8bytes, Span<byte> dst, bool isLast, ref bool had_replacements)
+        public unsafe uint EncodeUtf8(ReadOnlySpan<byte> u8bytes, Span<byte> dst, bool isLast, out long outputlength, ref bool had_replacements)
         {
             // throw new Exception($"encoder addr is {_Encoder}");
             var u8len = new IntPtr(u8bytes.Length);
             // var u8len = (uint)u8bytes.Length;
             var dstlen = new IntPtr(dst.Length);
-            return EncodingRsNative.encoder_encode_from_utf8(_Encoder, in u8bytes[0], ref u8len, ref dst[0], ref dstlen, isLast, ref had_replacements);
+            var ret = EncodingRsNative.encoder_encode_from_utf8(_Encoder, in u8bytes[0], ref u8len, ref dst[0], ref dstlen, isLast, ref had_replacements);
+            outputlength = (long)dstlen;
+            return ret;
         }
 
         protected virtual void Dispose(bool disposing)

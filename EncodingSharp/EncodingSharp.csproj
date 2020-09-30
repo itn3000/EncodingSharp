@@ -2,35 +2,32 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
-    <RuntimeIdentifiers>win-x64;win-x86;linux-x64;osx-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers>win-x64;win-x86</RuntimeIdentifiers>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <NativeConfigurationName>$(Configuration.ToLower())</NativeConfigurationName>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x64'">
-    <Triplet>x86_64-pc-windows-msvc</Triplet>
-    <NativeDllName>encoding_rs_glue.dll</NativeDllName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'win-x86'">
-    <Triplet>i686-pc-windows-msvc</Triplet>
-    <NativeDllName>encoding_rs_glue.dll</NativeDllName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'linux-x64'">
-    <Triplet>x86_64-unknown-linux-gnu</Triplet>
-    <NativeDllName>libencoding_rs_glue.so</NativeDllName>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(RuntimeIdentifier)' == 'osx-x64'">
-    <Triplet>x86_64-apple-darwin</Triplet>
-    <NativeDllName>encoding_rs_glue.dylib</NativeDllName>
-  </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="4.7.1" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="../target/$(Triplet)/$(NativeConfigurationName)/$(NativeDllName)" Condition="'$(RuntimeIdentifier)' != ''">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <!-- <None Include="../target/x86_64-pc-windows-msvc/$(NativeConfigurationName)/encoding_rs_glue.dll"
+      PackagePath="runtimes/win-x64/native"
+      Pack="true"
+      >
+    </None>
+    <None Include="../target/i686-pc-windows-msvc/$(NativeConfigurationName)/encoding_rs_glue.dll"
+      PackagePath="runtimes/win-x86/native"
+      Pack="true"
+      >
+    </None> -->
+    <PackageReference Include="EncodingSharp.Native" Version="1.0.0"/>
   </ItemGroup>
-
+  <Target Name="_GetReferenceAssemblies" DependsOnTargets="Build" Returns="@(ReferenceAssembliesOutput)">
+    <ItemGroup>
+      <ReferenceAssembliesOutput Include="@(IntermediateRefAssembly->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
+      <ReferenceAssembliesOutput Include="@(DocumentationProjectOutputGroupOutput->'%(FullPath)')" TargetFramework="$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
 </Project>

@@ -18,11 +18,13 @@ namespace EncodingSharp
             _Decoder = EncodingRsNative.encoding_new_decoder(_Encoding);
         }
 
-        public unsafe uint DecodeUtf8(ReadOnlySpan<byte> encodedbytes, Span<byte> u8dst, bool isLast, ref bool had_replacements)
+        public unsafe uint DecodeUtf8(ReadOnlySpan<byte> encodedbytes, Span<byte> u8dst, out long byteswritten, bool isLast, ref bool had_replacements)
         {
             var enclen = new IntPtr(encodedbytes.Length);
             var dstlen = new IntPtr(u8dst.Length);
-            return EncodingRsNative.decoder_decode_to_utf8(_Decoder, in encodedbytes[0], ref enclen, ref u8dst[0], ref dstlen, isLast, ref had_replacements);
+            var ret = EncodingRsNative.decoder_decode_to_utf8(_Decoder, in encodedbytes[0], ref enclen, ref u8dst[0], ref dstlen, isLast, ref had_replacements);
+            byteswritten = (long)dstlen;
+            return ret;
         }
 
         protected virtual void Dispose(bool disposing)

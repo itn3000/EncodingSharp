@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.Build.NoTargets/2.0.1">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="../target/x86_64-pc-windows-msvc/release/encoding_rs_glue.dll"
+      PackagePath="runtimes/win-x64/native"
+      Pack="true"
+      >
+    </None>
+    <None Include="../target/i686-pc-windows-msvc/release/encoding_rs_glue.dll"
+      PackagePath="runtimes/win-x86/native"
+      Pack="true"
+      >
+    </None>
+  </ItemGroup>
+
+</Project>

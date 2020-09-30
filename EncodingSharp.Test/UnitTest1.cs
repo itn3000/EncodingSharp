@@ -17,11 +17,12 @@ namespace EncodingSharp.Test
                 var sp = new Span<byte>(u8bytes);
                 Span<byte> dst = stackalloc byte[128];
                 bool had_replacements = false;
-                var encodedlength = encoder.EncodeUtf8(u8bytes, dst, true, ref had_replacements);
+                var issuccess = encoder.EncodeUtf8(u8bytes, dst, true, out var outlen, ref had_replacements);
+                Assert.Equal((uint)0, issuccess);
                 var enc = Encoding.GetEncoding(encodingName);
                 var clsencoded = enc.GetBytes(s);
-                Assert.Equal(clsencoded.Length, (int)encodedlength);
-                Assert.Equal(clsencoded, dst.Slice(0, (int)encodedlength).ToArray());
+                Assert.Equal(clsencoded.Length, (int)outlen);
+                Assert.Equal(clsencoded, dst.Slice(0, (int)outlen).ToArray());
             }
         }
     }
